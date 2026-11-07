@@ -40,4 +40,5 @@
 .quantity-controls{display:flex;align-items:center;gap:7px;flex:none}
 .quantity-controls button{width:25px;height:25px;border:1px solid var(--line);border-radius:7px;background:#f7faf5;color:var(--green);font-size:18px;line-height:1;padding:0}
 .quantity-controls b{min-width:16px;text-align:center;font-size:13px}
+.quantity-controls input{width:48px;border:1px solid var(--line);border-radius:7px;padding:4px;text-align:center;font:inherit;font-size:13px}
 .nutrition-food .remove-food{border:0;background:transparent;color:#b34c43;font-size:22px;padding:0 4px}
