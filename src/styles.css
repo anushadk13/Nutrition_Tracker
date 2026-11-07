@@ -37,3 +37,7 @@
 .picker-cancel{background:#f3f2ed;color:var(--ink)}
 .picker-actions .primary{background:var(--green);color:#fff}
 .picker-actions .primary:disabled{opacity:.45;cursor:not-allowed}
+.quantity-controls{display:flex;align-items:center;gap:7px;flex:none}
+.quantity-controls button{width:25px;height:25px;border:1px solid var(--line);border-radius:7px;background:#f7faf5;color:var(--green);font-size:18px;line-height:1;padding:0}
+.quantity-controls b{min-width:16px;text-align:center;font-size:13px}
+.nutrition-food .remove-food{border:0;background:transparent;color:#b34c43;font-size:22px;padding:0 4px}
