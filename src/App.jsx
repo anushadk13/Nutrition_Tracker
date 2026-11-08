@@ -9,7 +9,7 @@ import { loadAppData, saveAppData } from './firebaseData.js';
 const meals = ['Early Morning', 'Morning', 'Lunch', 'Evening', 'Dinner'];
 const categories = ['Protein', 'Dairy', 'Grains & carbs', 'Fruit', 'Vegetables', 'Nuts & seeds', 'Fats & other'];
 const foods = [
-  ['Tofu', 0, '100 g', 140, 15.1, .8, 5.9, 7.2], ['Greek yogurt', 1, '100 g', 55, 10.8, 3.7, 0, .2],
+  ['Tofu', 0, '100 g', 140, 15.1, .8, 5.9, 7.2], ['Protein powder', 0, '35 g', 140, 26, 0, 0, 0], ['Greek yogurt', 1, '100 g', 55, 10.8, 3.7, 0, .2],
   ['Eggs', 0, '2 eggs', 127, 12.6, .3, 0, 8.5], ['Lentils', 0, '100 g', 360, 24, 40.3, 19.3, 2.3],
   ['High-protein bread', 2, '2 slices', 200, 13.3, 22.2, 7.3, 4.6], ['Rice', 2, '100 g', 340, 7, 74, 1, 1],
   ['Oats', 2, '100 g', 380, 13, 55.3, 10.8, 9], ['Protein noodles', 2, '100 g', 505, 24.9, 50.5, 10, 2.2],
