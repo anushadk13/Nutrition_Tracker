@@ -61,7 +61,7 @@ export default function App() {
   const updateWellness = (field, amount) => setWellness(current => ({ ...current, [field]: Math.max(0, current[field] + amount) }));
   const toggleActivity = index => setActivities(current => current.map((activity, i) => i === index ? { ...activity, complete: !activity.complete } : activity));
   const toggleMorningActivity = index => setMorningActivities(current => current.map((activity, i) => i === index ? { ...activity, complete: !activity.complete } : activity));
-  const nav = ['home', 'nutrition', 'morning', 'fitness', 'progress', 'food', 'more'];
+  const nav = ['home', 'nutrition', 'routine', 'fitness', 'progress', 'food', 'more'];
   const dateLabel = selectedDate.toLocaleDateString('en-AU', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
   const shiftDate = amount => setSelectedDate(current => new Date(current.getTime() + amount * 86400000));
   const submitDay = () => { const date = selectedDate.toISOString().slice(0, 10); setDailyLogs(current => [...current.filter(log => log.date !== date), { date, label: dateLabel, calories: Math.round(day[0]), weight: goals.weight }]); };
@@ -70,12 +70,12 @@ export default function App() {
   return <main className="app-shell"><header className="hero"><div className="brand"><span className="brand-icon" aria-hidden="true">✦</span><strong>NutriPlan AI</strong></div><h1>Good Morning, Anusha <span>👋</span></h1><p className="hero-subtitle">Stay consistent, stay healthy!</p><div className="date-switcher"><button onClick={() => shiftDate(-1)}>‹</button><span><b>{dateLabel}</b></span><button onClick={() => shiftDate(1)}>›</button></div></header>
     {tab === 'home' && <><Dashboard day={day} goals={goals} setGoals={setGoals} wellness={wellness} updateWellness={updateWellness} activities={activities} toggleActivity={toggleActivity} plan={plan} add={setPicker} remove={(meal, item) => updateMeal(meal, items => items.filter((_, i) => i !== item))} /><HomeActions goals={goals} setGoals={setGoals} onSubmit={submitDay} syncStatus={syncStatus} /></>}
     {tab === 'nutrition' && <NutritionPageView day={day} goals={goals} plan={plan} foods={foods} add={setPicker} updateQuantity={(meal, item, amount) => updateMeal(meal, items => items.map((entry, i) => i === item ? { ...entry, quantity: Math.max(1, entry.quantity + amount) } : entry))} setQuantity={(meal, item, value) => updateMeal(meal, items => items.map((entry, i) => i === item ? { ...entry, quantity: Math.max(0.1, Number(value) || 0.1) } : entry))} duplicate={(source, target) => setPlan(current => current.map((items, i) => i === target ? [...items, ...current[source].map(item => ({ ...item }))] : items))} remove={(meal, item) => updateMeal(meal, items => items.filter((_, i) => i !== item))} />}
-    {tab === 'morning' && <MorningRoutinePageView activities={morningActivities} toggleActivity={toggleMorningActivity} />}
+    {tab === 'routine' && <MorningRoutinePageView activities={morningActivities} toggleActivity={toggleMorningActivity} />}
     {tab === 'fitness' && <FitnessPageView activities={activities} toggleActivity={toggleActivity} wellness={wellness} updateWellness={updateWellness} />}
     {tab === 'progress' && <ProgressPageView day={day} goals={goals} wellness={wellness} logs={dailyLogs} />}
     {tab === 'food' && <FoodPageView foods={foods} />}
     {tab === 'more' && <MorePageView profile={profile} setProfile={setProfile} goals={goals} setGoals={setGoals} />}
-    <nav className="bottom-nav">{nav.map(item => <button key={item} className={tab === item ? 'selected' : ''} onClick={() => setTab(item)}><span className="nav-icon">{({ home: '⌂', nutrition: '♜', morning: '☀', fitness: '♧', progress: '▥', food: '▢', more: '⊞' })[item]}</span><small>{item === 'morning' ? 'Morning Routine' : item[0].toUpperCase() + item.slice(1)}</small></button>)}</nav>
+    <nav className="bottom-nav">{nav.map(item => <button key={item} className={tab === item ? 'selected' : ''} onClick={() => setTab(item)}><span className="nav-icon">{({ home: '⌂', nutrition: '♜', routine: '☀', fitness: '♧', progress: '▥', food: '▢', more: '⊞' })[item]}</span><small>{item[0].toUpperCase() + item.slice(1)}</small></button>)}</nav>
     {picker !== null && <FoodPicker onClose={() => setPicker(null)} add={selectedFoods => { updateMeal(picker, items => [...items, ...selectedFoods.map(food => ({ food, quantity: 1 }))]); setPicker(null); }} />}</main>;
 }
 

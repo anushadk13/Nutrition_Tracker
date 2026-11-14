@@ -3,6 +3,8 @@
 
 .nutrition-plan-header span,.meal-actions button{white-space:nowrap}
 .nutrition-food-info{flex:1;min-width:0}.nutrition-food-info span,.nutrition-food-info small{display:block}.nutrition-food-info small{margin-top:3px}
+.nutrition-food{flex-wrap:nowrap}.nutrition-food-info{overflow-wrap:anywhere}.quantity-controls{flex-wrap:nowrap;white-space:nowrap}
+.food-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}.food-table{min-width:620px!important;width:max-content!important;table-layout:auto!important}.food-table th,.food-table td{padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;width:auto!important}.food-table th{min-width:60px}.food-table th:first-child,.food-table td:first-child{white-space:normal!important;min-width:120px;max-width:160px}
 .nutrition-top-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 26px}.nutrition-top-stats div{padding:12px 14px;border:1px solid #e1eadc;border-radius:16px;background:#fff}.nutrition-top-stats b,.nutrition-top-stats small{display:block}.nutrition-top-stats b{font-size:21px;color:#183c22}.nutrition-top-stats small{margin-top:3px;color:#718071;font-size:13px}
 @media(max-width:700px){.nutrition-top-stats{gap:6px;margin-bottom:18px}.nutrition-top-stats div{padding:9px 7px;text-align:center}.nutrition-top-stats b{font-size:16px}.nutrition-top-stats small{font-size:11px}}
 .page{margin-top:62px}.page h2{font-size:28px}.page-stats{gap:7px}.page-stats div{padding:12px 8px}.page-stats b{font-size:18px}.page-stats small{font-size:11px}.recipe-grid{grid-template-columns:repeat(2,1fr)}.setting{gap:10px}.setting input{width:125px}
