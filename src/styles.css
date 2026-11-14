@@ -35,6 +35,7 @@
 @media(max-width:700px){.home-actions{margin:12px}.submitted-day{grid-template-columns:1fr;gap:3px}.chart-legend{font-size:12px}}
 .modal{align-items:center;padding:18px}
 .sheet{border-radius:22px}
+.sheet{display:flex;flex-direction:column;max-height:85vh}.sheet .row{flex:0 0 auto}.food-picker-list{flex:1 1 auto;min-height:0;overflow-y:auto}.picker-actions{flex:0 0 auto;background:#fff;padding-bottom:2px}
 .food-line.selected{background:#eff8ed;color:var(--green)}
 .food-line.selected small{color:var(--green)}
 .picker-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
