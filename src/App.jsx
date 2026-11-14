@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import NutritionPageView from './pages/NutritionPage.jsx';
 import FitnessPageView from './pages/FitnessPage.jsx';
+import MorningRoutinePageView from './pages/MorningRoutinePage.jsx';
 import ProgressPageView from './pages/ProgressPage.jsx';
 import FoodPageView from './pages/FoodPage.jsx';
 import MorePageView from './pages/MorePage.jsx';
 import { loadAppData, saveAppData } from './firebaseData.js';
 
-const meals = ['Early Morning', 'Morning', 'Lunch', 'Evening', 'Dinner'];
+const meals = ['Early Morning', 'Morning', 'Afternoon', 'Lunch', 'Evening', 'Dinner', 'Before Bedtime'];
 const categories = ['Protein', 'Dairy', 'Grains & carbs', 'Fruit', 'Vegetables', 'Nuts & seeds', 'Fats & other'];
 const foods = [
   ['Tofu', 0, '100 g', 140, 15.1, .8, 5.9, 7.2], ['Protein powder', 0, '35 g', 140, 26, 0, 0, 0], ['Greek yogurt', 1, '100 g', 55, 10.8, 3.7, 0, .2],
   ['Eggs', 0, '2 eggs', 127, 12.6, .3, 0, 8.5], ['Lentils', 0, '100 g', 360, 24, 40.3, 19.3, 2.3],
   ['High-protein bread', 2, '2 slices', 200, 13.3, 22.2, 7.3, 4.6], ['Rice', 2, '100 g', 340, 7, 74, 1, 1],
-  ['Oats', 2, '100 g', 380, 13, 55.3, 10.8, 9], ['Protein noodles', 2, '100 g', 505, 24.9, 50.5, 10, 2.2],
+  ['Oats', 2, '100 g', 380, 13, 55.3, 10.8, 9], ['Protein pasta', 2, '100 g', 343, 24.9, 50.5, 10, 2.2],
   ['Rice cakes', 2, '4 slices', 100, 2.1, 20, .5, .5], ['High-protein almond milk', 1, '100 ml', 39, 4.1, .3, .3, 2.3],
   ['Almond milk', 1, '100 ml', 13, 1, 1, 1, null],
   ['Almond', 5, '1 whole (2 halves)', 7, .26, null, .15, null], ['Walnut', 5, '1 half', 13, .30, null, .14, null],
@@ -24,15 +25,25 @@ const foods = [
   ['Onion', 4, '100 g', 40, 1.1, 9.34, 1.7, .1], ['Spinach', 4, '100 g', 23, 2.86, 3.63, 2.2, .39],
   ['Sweet potato', 4, '100 g', 86, 1.57, 20.12, 3, .05], ['Potato', 4, '100 g', 77, 2.05, 17.49, 2.1, .09],
   ['Pumpkin', 4, '100 g', 26, 1, 6.5, .5, .1],
-  ['Apple', 3, '100 g', 52, .26, 13.81, 2.4, .17], ['Papaya', 3, '100 g', 43, .47, 10.82, 1.7, .26],
+  ['Apple', 3, '100 g', 52, .26, 13.81, 2.4, .17], ['Kiwi', 3, '1 fruit', 42, .8, 10.1, 2.1, .4], ['Papaya', 3, '100 g', 43, .47, 10.82, 1.7, .26],
   ['Watermelon', 3, '100 g', 30, .61, 7.55, .4, .15], ['Banana', 3, '100 g', 89, 1.09, 22.84, 2.6, .33],
   ['Strawberry', 3, '100 g', 32, .67, 7.68, 2, .3], ['Mixed berries', 3, '100 g', 50, .7, 12, 4, .3],
-  ['Honey', 6, '25 g', 84, 0, 20.5, 0, 0], ['Cocoa powder', 6, '10 g', 34, 2.3, 1.16, 3.36, .5],
+  ['Honey', 6, '25 g', 84, 0, 20.5, 0, 0], ['Cocoa powder', 6, '10 g', 34, 2.3, 1.16, 3.36, .5], ['Coffee shot', 6, '1 shot', 2, .3, 0, 0, 0], ['Tea', 6, '1 cup', 2, 0, .4, 0, 0],
   ['Olive oil', 6, '15 ml', 121, .2, 0, 0, 13.8],
 ];
-const initialPlan = [[['Tofu', 1]], [['Protein noodles', 1]], [['Tofu', 1], ['Rice', 1]], [['Greek yogurt', 1]], [['Lentils', 1]]];
-const initialWellness = { water: 2.1, waterGoal: 2.5, sleep: 7.5, sleepGoal: 8, steps: 8420, stepsGoal: 10000, workouts: 4, workoutGoal: 5 };
-const initialActivities = [{ name: '10,000 steps', duration: 0, complete: false }, { name: '25–30 push-ups', duration: 5, complete: false }, { name: 'Abs workout', duration: 12, complete: false }, { name: 'Daily stretching', duration: 10, complete: false }, { name: 'Treadmill · gym days', duration: 20, complete: false }, { name: 'Dead hangs · gym days', duration: 5, complete: false }];
+const dataVersion = 5;
+const initialPlan = [[], [], [], [], [], [], []];
+const initialWellness = { water: 2.1, waterGoal: 2.5, sleep: 7.5, sleepGoal: 8, steps: 8420, stepsGoal: 10000, workouts: 4, workoutGoal: 4 };
+const initialMorningActivities = [
+  { name: 'Freshen up', duration: 0, complete: false },
+  { name: 'Ghee water', duration: 0, complete: false },
+  { name: 'Chia seeds water', duration: 0, complete: false },
+  { name: 'Stretching', duration: 15, complete: false },
+  { name: 'Prayer + Pooja + manifest', duration: 0, complete: false },
+  { name: 'Coffee / tea', duration: 0, complete: false },
+  { name: 'Before bed: kiwi + magnesium glycinate', duration: 0, complete: false },
+];
+const initialActivities = [{ name: '10,000–12,000 steps', duration: 0, complete: false }, { name: 'Gym · 4x per week', duration: 45, complete: false }];
 const initialGoals = { weight: 53, weightGoal: 58, protein: 100, calories: 1600 };
 const initialProfile = { name: 'Anusha', age: 25, weight: 53, height: 165, email: 'anusha@example.com', gender: 'Female' };
 const toPlan = () => initialPlan.map(items => items.map(([name, quantity]) => ({ food: foods.findIndex(([foodName]) => foodName === name), quantity })));
@@ -42,27 +53,29 @@ const format = value => Math.round(value * 10) / 10;
 export default function App() {
   const [tab, setTab] = useState('home'); const [plan, setPlan] = useState(toPlan); const [picker, setPicker] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date('2026-11-07T12:00:00'));
-  const [wellness, setWellness] = useState(initialWellness); const [activities, setActivities] = useState(initialActivities); const [goals, setGoals] = useState(initialGoals);
+  const [wellness, setWellness] = useState(initialWellness); const [activities, setActivities] = useState(initialActivities); const [morningActivities, setMorningActivities] = useState(initialMorningActivities); const [goals, setGoals] = useState(initialGoals);
   const [profile, setProfile] = useState(initialProfile);
   const [dailyLogs, setDailyLogs] = useState([]);
   const [hydrated, setHydrated] = useState(false); const [syncStatus, setSyncStatus] = useState('loading');
   const day = useMemo(() => totals(plan.flat()), [plan]); const updateMeal = (meal, update) => setPlan(current => current.map((items, i) => i === meal ? update(items) : items));
   const updateWellness = (field, amount) => setWellness(current => ({ ...current, [field]: Math.max(0, current[field] + amount) }));
   const toggleActivity = index => setActivities(current => current.map((activity, i) => i === index ? { ...activity, complete: !activity.complete } : activity));
-  const nav = ['home', 'nutrition', 'fitness', 'progress', 'food', 'more'];
+  const toggleMorningActivity = index => setMorningActivities(current => current.map((activity, i) => i === index ? { ...activity, complete: !activity.complete } : activity));
+  const nav = ['home', 'nutrition', 'morning', 'fitness', 'progress', 'food', 'more'];
   const dateLabel = selectedDate.toLocaleDateString('en-AU', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
   const shiftDate = amount => setSelectedDate(current => new Date(current.getTime() + amount * 86400000));
   const submitDay = () => { const date = selectedDate.toISOString().slice(0, 10); setDailyLogs(current => [...current.filter(log => log.date !== date), { date, label: dateLabel, calories: Math.round(day[0]), weight: goals.weight }]); };
-  useEffect(() => { let active = true; loadAppData().then(data => { if (!active) return; if (data) { if (data.plan) setPlan(data.plan); if (data.wellness) setWellness(current => ({ ...current, ...data.wellness })); if (data.activities) setActivities(data.activities); if (data.goals) setGoals(current => ({ ...current, ...data.goals })); if (data.profile) setProfile(current => ({ ...current, ...data.profile })); if (data.dailyLogs) setDailyLogs(data.dailyLogs); if (data.selectedDate) setSelectedDate(new Date(data.selectedDate)); } setHydrated(true); setSyncStatus('synced'); }).catch(error => { console.warn('Firebase load failed; using local session data.', error); if (active) { setHydrated(true); setSyncStatus('offline'); } }); return () => { active = false; }; }, []);
-  useEffect(() => { if (!hydrated) return undefined; const timer = setTimeout(() => saveAppData({ plan, wellness, activities, goals, profile, dailyLogs, selectedDate: selectedDate.toISOString() }).then(() => setSyncStatus('synced')).catch(error => { console.warn('Firebase save failed.', error); setSyncStatus('offline'); }), 500); return () => clearTimeout(timer); }, [hydrated, plan, wellness, activities, goals, profile, dailyLogs, selectedDate]);
+  useEffect(() => { let active = true; loadAppData().then(data => { if (!active) return; const migrated = !data || data.dataVersion < dataVersion; if (data && !migrated) { if (data.plan) setPlan(data.plan); if (data.wellness) setWellness(current => ({ ...current, ...data.wellness })); if (data.activities) setActivities(data.activities); if (data.morningActivities) setMorningActivities(data.morningActivities); if (data.goals) setGoals(current => ({ ...current, ...data.goals })); if (data.profile) setProfile(current => ({ ...current, ...data.profile })); if (data.dailyLogs) setDailyLogs(data.dailyLogs); if (data.selectedDate) setSelectedDate(new Date(data.selectedDate)); } else if (data?.goals || data?.profile || data?.dailyLogs || data?.selectedDate) { setPlan(toPlan()); if (data.goals) setGoals(current => ({ ...current, ...data.goals })); if (data.profile) setProfile(current => ({ ...current, ...data.profile })); if (data.dailyLogs) setDailyLogs(data.dailyLogs); if (data.selectedDate) setSelectedDate(new Date(data.selectedDate)); } setHydrated(true); setSyncStatus('synced'); }).catch(error => { console.warn('Firebase load failed; using saved local data.', error); if (active) { setHydrated(true); setSyncStatus('offline'); } }); return () => { active = false; }; }, []);
+  useEffect(() => { if (!hydrated) return undefined; const payload = { dataVersion, plan, wellness, activities, morningActivities, goals, profile, dailyLogs, selectedDate: selectedDate.toISOString() }; const timer = setTimeout(() => saveAppData(payload).then(() => setSyncStatus('synced')).catch(error => { console.warn('Firebase save failed; local data was retained.', error); setSyncStatus('offline'); }), 500); return () => clearTimeout(timer); }, [hydrated, plan, wellness, activities, morningActivities, goals, profile, dailyLogs, selectedDate]);
   return <main className="app-shell"><header className="hero"><div className="brand"><span className="brand-icon" aria-hidden="true">✦</span><strong>NutriPlan AI</strong></div><h1>Good Morning, Anusha <span>👋</span></h1><p className="hero-subtitle">Stay consistent, stay healthy!</p><div className="date-switcher"><button onClick={() => shiftDate(-1)}>‹</button><span><b>{dateLabel}</b></span><button onClick={() => shiftDate(1)}>›</button></div></header>
     {tab === 'home' && <><Dashboard day={day} goals={goals} setGoals={setGoals} wellness={wellness} updateWellness={updateWellness} activities={activities} toggleActivity={toggleActivity} plan={plan} add={setPicker} remove={(meal, item) => updateMeal(meal, items => items.filter((_, i) => i !== item))} /><HomeActions goals={goals} setGoals={setGoals} onSubmit={submitDay} syncStatus={syncStatus} /></>}
     {tab === 'nutrition' && <NutritionPageView day={day} goals={goals} plan={plan} foods={foods} add={setPicker} updateQuantity={(meal, item, amount) => updateMeal(meal, items => items.map((entry, i) => i === item ? { ...entry, quantity: Math.max(1, entry.quantity + amount) } : entry))} setQuantity={(meal, item, value) => updateMeal(meal, items => items.map((entry, i) => i === item ? { ...entry, quantity: Math.max(0.1, Number(value) || 0.1) } : entry))} duplicate={(source, target) => setPlan(current => current.map((items, i) => i === target ? [...items, ...current[source].map(item => ({ ...item }))] : items))} remove={(meal, item) => updateMeal(meal, items => items.filter((_, i) => i !== item))} />}
+    {tab === 'morning' && <MorningRoutinePageView activities={morningActivities} toggleActivity={toggleMorningActivity} />}
     {tab === 'fitness' && <FitnessPageView activities={activities} toggleActivity={toggleActivity} wellness={wellness} updateWellness={updateWellness} />}
     {tab === 'progress' && <ProgressPageView day={day} goals={goals} wellness={wellness} logs={dailyLogs} />}
     {tab === 'food' && <FoodPageView foods={foods} />}
     {tab === 'more' && <MorePageView profile={profile} setProfile={setProfile} goals={goals} setGoals={setGoals} />}
-    <nav className="bottom-nav">{nav.map(item => <button key={item} className={tab === item ? 'selected' : ''} onClick={() => setTab(item)}><span className="nav-icon">{({ home: '⌂', nutrition: '♜', fitness: '♧', progress: '▥', food: '▢', more: '⊞' })[item]}</span><small>{item[0].toUpperCase() + item.slice(1)}</small></button>)}</nav>
+    <nav className="bottom-nav">{nav.map(item => <button key={item} className={tab === item ? 'selected' : ''} onClick={() => setTab(item)}><span className="nav-icon">{({ home: '⌂', nutrition: '♜', morning: '☀', fitness: '♧', progress: '▥', food: '▢', more: '⊞' })[item]}</span><small>{item === 'morning' ? 'Morning Routine' : item[0].toUpperCase() + item.slice(1)}</small></button>)}</nav>
     {picker !== null && <FoodPicker onClose={() => setPicker(null)} add={selectedFoods => { updateMeal(picker, items => [...items, ...selectedFoods.map(food => ({ food, quantity: 1 }))]); setPicker(null); }} />}</main>;
 }
 
@@ -70,7 +83,7 @@ function Dashboard({ day, goals, setGoals, wellness, updateWellness, activities,
 
 function HomeActions({ goals, setGoals, onSubmit, syncStatus }) { return <section className="home-actions card"><label>Weight <input type="number" min="0" step="0.1" value={goals.weight} onChange={event => setGoals(current => ({ ...current, weight: Number(event.target.value) || 0 }))} /> kg</label><span className={`sync-status ${syncStatus}`}>{syncStatus === 'synced' ? 'Synced' : syncStatus === 'loading' ? 'Connecting…' : 'Offline'}</span><button className="primary submit-day" onClick={onSubmit}>Submit day</button></section>; }
 
-function MealPlan({ plan, add, remove }) { return <section className="meal-card card"><div className="card-title"><h2>♨ &nbsp; Meal Plan</h2><b>{Math.round(totals(plan.flat())[0])} kcal</b></div>{plan.map((items, meal) => <div className="meal-row" key={meals[meal]}><div className={`meal-thumb thumb-${meal}`}>{['☕', '🍝', '🥗', '🥤', '🍛'][meal]}</div><div className="meal-info"><div><b>{meals[meal]}</b><span>{['6:30 AM', '8:30 AM', '1:00 PM', '4:30 PM', '7:30 PM'][meal]}</span></div><p>{items.map(item => foods[item.food][0]).join(', ') || 'Add something delicious...'}</p><strong>{Math.round(totals(items)[0]) || 0} kcal <small> | P {format(totals(items)[1])} g &nbsp; C {format(totals(items)[2])} g</small></strong></div><button className={`check ${items.length ? 'done' : ''}`} onClick={() => items.length && remove(meal, 0)}>{items.length ? '✓' : '○'}</button></div>)} </section>; }
+function MealPlan({ plan, add, remove }) { return <section className="meal-card card"><div className="card-title"><h2>♨ &nbsp; Meal Plan</h2><b>{Math.round(totals(plan.flat())[0])} kcal</b></div>{plan.map((items, meal) => <div className="meal-row" key={meals[meal]}><div className={`meal-thumb thumb-${meal}`}>{['☀', '☀', '◒', '🥗', '☕', '☾', '✦'][meal]}</div><div className="meal-info"><div><b>{meals[meal]}</b><span>{['6:30 AM', '8:30 AM', '11:30 AM', '2:00 PM', '4:30 PM', '7:30 PM', '9:30 PM'][meal]}</span></div><p>{items.map(item => foods[item.food][0]).join(', ') || 'Add something delicious...'}</p><strong>{Math.round(totals(items)[0]) || 0} kcal <small> | P {format(totals(items)[1])} g &nbsp; C {format(totals(items)[2])}</small></strong></div><button className={`check ${items.length ? 'done' : ''}`} onClick={() => items.length && remove(meal, 0)}>{items.length ? '✓' : '○'}</button></div>)} </section>; }
 function Aside() { return null; }
 function Page({ title, eyebrow, children }) { return <section className="page card"><span className="page-eyebrow">{eyebrow}</span><h2>{title}</h2>{children}</section>; }
 function NutritionPage({ day, goals, plan }) { return <Page title="Nutrition" eyebrow="Your daily intake"><div className="page-stats"><div><b>{Math.round(day[0])}</b><small>kcal consumed</small></div><div><b>{format(day[1])} g</b><small>protein</small></div><div><b>{format(day[3])} g</b><small>fibre</small></div></div><h3>Daily nutrients</h3>{[['Calories', day[0], goals.calories], ['Protein', day[1], goals.protein], ['Carbohydrates', day[2], 200], ['Fat', day[4], 50], ['Fibre', day[3], 30]].map(([label, value, target]) => <div className="progress-row" key={label}><span>{label}</span><b>{format(value)} / {target} g</b><em><i style={{ width: `${Math.min(100, value / target * 100)}%` }} /></em></div>)}<h3>Meals logged</h3><p>{plan.filter(Boolean).length} meal slots are in your plan. Add foods from Home to update these totals.</p></Page>; }
